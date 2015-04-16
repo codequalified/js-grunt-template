@@ -16,21 +16,31 @@ module.exports = function(grunt) {
         concat: {
             options: {
                 // define a string to put between each file in the concatenated output
-                separator: ';'
+                separator: '\n;'
             },
             dist: {
                 // the files to concatenate
-                src: ['bower_components/**/*.js','src/**/*.js'],
+                src: ['bower_components/jquery/dist/jquery.min.js','src/**/*.js'],
                 // the location of the resulting JS file
                 dest: 'dist/main.js'
             }
+        },
+        simplemocha: {
+            options: {
+                globals: ['expect'],
+                timeout: 3000,
+                ignoreLeaks: false,
+                ui: 'bdd',
+                reporter: 'tap'
+            },
+            all: { src: ['dist/main.js','test/*.js'] }
         }
     });
     
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    
-    grunt.registerTask('default', ['jshint']);
+    grunt.loadNpmTasks('grunt-simple-mocha');
+    grunt.registerTask('default', ['jshint','concat','simplemocha']);
     
 };
